@@ -1,0 +1,42 @@
+# PROTECTED_ES client(system, coredomain)。secure Surface + secure MediaCodec。
+# producer は vendor HAL。server 型は名指しせず server 属性経由の binder で結ぶ(#A解消)。
+type l01ktv_player, domain, coredomain;
+type l01ktv_player_exec, exec_type, file_type, system_file_type;
+# init から起動する(bring-up の試験経路。将来は APK/AIDL 起動)。
+init_daemon_domain(l01ktv_player)
+hal_client_domain(l01ktv_player, hal_l01ktv_rmp)
+
+# servicemanager への binder call(SurfaceFlinger/mediaserver/HAL を find する土台。実機AVC)。
+binder_use(l01ktv_player)
+# HAL を find + 呼び出し(属性経由)。callback は server 側で許可済み。
+allow l01ktv_player hal_l01ktv_rmp_service:service_manager find;
+binder_call(l01ktv_player, hal_l01ktv_rmp_server)
+
+# SurfaceComposer / secure Surface
+allow l01ktv_player surfaceflinger_service:service_manager find;
+binder_call(l01ktv_player, surfaceflinger)
+allow l01ktv_player gpu_device:chr_file rw_file_perms;
+# MediaCodec クライアント。secure codec は OMX HAL(HIDL) 経由(実機AVCで確定 #B)。
+allow l01ktv_player mediaserver_service:service_manager find;
+binder_call(l01ktv_player, mediaserver)
+hal_client_domain(l01ktv_player, hal_omx)
+# secure MediaCodec の出力バッファ=gralloc。allocator(HIDL/AIDL)+mapper(same-process .so)。
+hal_client_domain(l01ktv_player, hal_graphics_allocator)
+allow l01ktv_player hal_graphics_allocator_service:service_manager find;
+# mapper は same-process(属性HALでない)。hwservice find と impl .so ロードのみ。
+allow l01ktv_player hal_graphics_mapper_hwservice:hwservice_manager find;
+allow l01ktv_player same_process_hal_file:file { open read getattr execute map };
+# mediaserver / surfaceflinger から client(player)への callback binder。
+# surfaceflinger→player は protected Surface のバッファ返却コールバック。これが無いと
+# 出力バッファが返らず codec が数フレームで停止する(throughput 頭打ちの原因)。
+allow mediaserver l01ktv_player:binder call;
+allow surfaceflinger l01ktv_player:binder call;
+# secure codec(in-process)の ion バッファ / media metrics。
+# ※ mediacodec 型は system_ext から不可視のため player では参照不可(FD取り回しは allow 不要で成立)。
+allow l01ktv_player ion_device:chr_file rw_file_perms;
+allow l01ktv_player mediametrics_service:service_manager find;
+# in-process MediaCodec が media.metrics へ codec 統計を oneway submitBuffer する(MediaCodec.cpp の
+# mediametrics_*)。AOSP は app/mediaserver に binderservicedomain 経由で同等の call を許している。
+# v13 実機で唯一残った AVC(scontext=l01ktv_player tcontext=mediametrics binder call)。call のみ許可。
+allow l01ktv_player mediametrics:binder call;
+allow l01ktv_player self:fifo_file rw_file_perms;

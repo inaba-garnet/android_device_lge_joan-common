@@ -1,0 +1,4 @@
+# PROTECTED_ES producer HAL(vendor.l01k.tv.rmp)。client(system)↔server(vendor) の attribute と
+# service 型を public に置き、双方から参照できるようにする(#A を境界越しにクリーンに解決する要)。
+hal_attribute(l01ktv_rmp)
+type hal_l01ktv_rmp_service, service_manager_type;
