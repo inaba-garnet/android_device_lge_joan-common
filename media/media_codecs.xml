@@ -243,7 +243,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="concurrent-instances" max="24" />
             <Limit name="performance-point-1920x1088" value="60" />
         </MediaCodec>
-<!-- not support
+        <!-- L-01K TV: plain (non-secure) MPEG-2 for the clear-TS path -->
         <MediaCodec name="OMX.qcom.video.decoder.mpeg2" type="video/mpeg2" >
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
@@ -257,6 +257,7 @@ Only the three quirks included above are recognized at this point:
             <Limit name="concurrent-instances" max="24" />
             <Limit name="performance-point-1920x1088" value="30" />
         </MediaCodec>
+        <!-- L-01K TV(RMP): secure MPEG-2 for the protected path (secure MediaCodec + protected Surface) -->
         <MediaCodec name="OMX.qcom.video.decoder.mpeg2.secure" type="video/mpeg2" >
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
@@ -271,7 +272,6 @@ Only the three quirks included above are recognized at this point:
             <Limit name="concurrent-instances" max="6" />
             <Limit name="performance-point-1920x1088" value="30" />
         </MediaCodec>
--->
         <MediaCodec name="OMX.qcom.video.decoder.h263" type="video/3gpp" >
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
