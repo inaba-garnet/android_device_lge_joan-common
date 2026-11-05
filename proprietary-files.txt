@@ -569,7 +569,6 @@ vendor/lib64/libdrmfs.so|cf8706de5796a29fec22e2b1e0edd2aacc7ffc7e
 vendor/lib64/libdrmtime.so|a3a2686bf4049adf67612fe890d94bc54b5fc4e6
 vendor/lib64/libhdcpsrm.so|affdc2195766c34226510dd422fbf22f689b25b2
 vendor/lib64/libqisl.so|529d7e20bb33147fe3404c1a58d266e49228046a
-vendor/lib64/librmp.so|2618a622b4bcd285878f9a65bf75fef57885bc2e
 vendor/lib64/librpmb.so|7e79c722e87fbe1de6c1b1032e1778f8c91551cb
 vendor/lib64/libsecureui_svcsock.so|ea041b45952ddbf23c6c2cb949439f174c7de51b
 vendor/lib64/libspl.so|f9c12bc40b075ef5b933fe0ff6b86ebe72a031db
@@ -1011,3 +1010,6 @@ vendor/lib64/vendor.qti.hardware.tui_comm@1.0.so|7f579dad97d8b5d048e80daa8929172
 
 # Wifi - from phoenix_sprout - phoenix_lgu_kr-user 11 RKQ1.201123.002 8998110220201 release-keys
 vendor/bin/cnss-daemon|bc8cbaea7fb8d8e4a16940faca6cd999341bac34
+
+# ISDB-T CAS client (pairs with the securemm TA in modem) - from joan_dcm_jp L-01K 9 PKQ1.190414.001 20072184679ed release-keys
+vendor/lib64/librmp.so|2763d898c451bace891d04a19f5c9db4024af3f4
